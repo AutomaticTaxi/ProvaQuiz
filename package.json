@@ -1,21 +1,13 @@
 {
-  "name": "provaweb",
+  "name": "nova-pasta",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AutomaticTaxi/ProvaQuiz.git"
-  },
-  "author": "",
+  "author": "Lucas dos Santos Antunes",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/AutomaticTaxi/ProvaQuiz/issues"
-  },
-  "homepage": "https://github.com/AutomaticTaxi/ProvaQuiz#readme",
+  "description": "",
   "dependencies": {
     "express": "^4.19.2",
     "socket.io": "^4.7.5",

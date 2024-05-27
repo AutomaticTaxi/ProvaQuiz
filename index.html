@@ -1,50 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <title>Prova_Lucas_dos_Santos_Antunes</title>
-
+    <title>Quiz Game</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<style>
-   #div_title{
-    align-items: center;
-    align-content: center;
-
-   }
-   h1{
-    align-items: center;
-    align-content: center;
-    align-self: center;
-   }
-</style>
 <body>
-    <h1> Bem Vindo ao Quiz </h1>
-    <div id="div_title">    
-        <h1> Quiz</h1>
-    
-    <label id="label_pergunta">
-        dgsdffgdsgsdgsdgdsgddgf sdf dfsdf dsf ?
-    </label>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Quiz Game</h1>
+        <div id="pergunta-container" class="mb-4">
+            <p id="pergunta" class="h5"></p>
+            <div id="div_opcoes" class="btn-group-vertical w-100" role="group"></div>
+        </div>
+        <div id="result" class="alert alert-info d-none" role="alert"></div>
+        <div id="div_pontos" class="mt-4"></div>
     </div>
-    <div id="div_bts">
-        <button id="Opt1" > 
-                Resposta 1
-        </button>
-        <button id="Opt2" > 
-            Resposta 2
-        </button>
-        <button id="Opt3" > 
-            resposta 3 
-        </button>
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
 
-</div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        socket.on('pergunta', (data) => {
+            document.getElementById('pergunta').innerText = data.pergunta;
+            const opcoesDiv = document.getElementById('div_opcoes');
+            opcoesDiv.innerHTML = '';
+            data.opcoes.forEach(option => {
+                const button = document.createElement('button');
+                button.classList.add('btn', 'btn-outline-primary', 'mb-2', 'w-100');
+                button.innerText = option;
+                button.onclick = () => {
+                    socket.emit('resposta', { pergunta: data.pergunta, resposta: option }); 
+                };
+                opcoesDiv.appendChild(button);
+            });
+        });
 
+        socket.on('result', (data) => {
+            const resultDiv = document.getElementById('result');
+            resultDiv.classList.remove('d-none');
+            resultDiv.innerText = data.correct ? 'Correto!' : 'Incorreto!';
+            resultDiv.classList.toggle('alert-success', data.correct);
+            resultDiv.classList.toggle('alert-danger', !data.correct);
+        });
+
+        socket.on('pontos_jogador', (data) => {
+            const scoreDiv = document.getElementById('div_pontos');
+            scoreDiv.innerText = `Sua pontuação: ${data.pontos_jogador}`;
+        });
+
+        socket.on('connect', () => {
+            console.log('Conectado ao servidor');
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Desconectado do servidor');
+        });
+    </script>
 </body>
-
-
 </html>

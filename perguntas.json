@@ -1,0 +1,20 @@
+[
+    {
+        "pergunta": "Qual é a capital do Mato grosso do Sul ?",
+        "opcoes": ["Parana", "Amambai", "Dourados", "Campo-Grande"],
+        "resposta": "Campo-Grande"
+    },
+    {
+        "pergunta": "Qual moto o autor do códico tem ?",
+        "opcoes": ["YBR-125'HUMILDE'", "R3 'bOY'", "R6'PLAY BOY'", "TITAN' OS D VIDA'"],
+        "resposta": "YBR-125'HUMILDE'"
+    },
+    {
+        "pergunta": "Qual o distrito federal do Brasil ?",
+        "opcoes": ["Brasilia", "Rio de Janeiro", "São Paulo", "Minas Gerais"],
+        "resposta": "Brasilia"
+    }
+    
+]
+
+
