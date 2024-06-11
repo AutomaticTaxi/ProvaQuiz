@@ -4,21 +4,56 @@
     <title>Quiz Game</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #main-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        #quiz-container {
+            flex: 1;
+        }
+        #Placar-container {
+            width: 300px;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
         <h1 class="text-center mb-4">Quiz Game</h1>
-        <div id="pergunta-container" class="mb-4">
-            <p id="pergunta" class="h5"></p>
-            <div id="div_opcoes" class="btn-group-vertical w-100" role="group"></div>
+        <div id="main-container">
+            <div id="quiz-container">
+                <div id="login-container" class="mb-4">
+                    <input type="text" id="username" class="form-control" placeholder="entre com seu nome">
+                    <button id="login-button" class="btn btn-primary mt-2">Start Quiz</button>
+                </div>
+                
+                <div id="pergunta-container" class="mb-4">
+                    <p id="pergunta" class="h5"></p>
+                    <div id="div_opcoes" class="btn-group-vertical w-100" role="group"></div>
+                </div>
+                <div id="result" class="alert alert-info d-none" role="alert"></div>
+                <div id="div_pontos" class="mt-4"></div>
+            </div>
+            
+            <div id="Placar-container">
+                <h3>Placar</h3>
+                <ul id="Placar" class="list-group"></ul>
+            </div>
         </div>
-        <div id="result" class="alert alert-info d-none" role="alert"></div>
-        <div id="div_pontos" class="mt-4"></div>
     </div>
     
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
+
+        document.getElementById('login-button').onclick = () => {
+            const username = document.getElementById('username').value;
+            if (username) {
+                socket.emit('login', { username: username });
+                document.getElementById('login-container').classList.add('d-none');
+                document.getElementById('quiz-container').classList.remove('d-none');
+            }
+        };
 
         socket.on('pergunta', (data) => {
             document.getElementById('pergunta').innerText = data.pergunta;
@@ -46,6 +81,17 @@
         socket.on('pontos_jogador', (data) => {
             const scoreDiv = document.getElementById('div_pontos');
             scoreDiv.innerText = `Sua pontuação: ${data.pontos_jogador}`;
+        });
+
+        socket.on('Placar', (data) => {
+            const Placar = document.getElementById('Placar');
+            Placar.innerHTML = '';
+            data.forEach(player => {
+                const li = document.createElement('li');
+                li.classList.add('list-group-item');
+                li.innerText = `${player.username}: ${player.pontos}`;
+                Placar.appendChild(li);
+            });
         });
 
         socket.on('connect', () => {
